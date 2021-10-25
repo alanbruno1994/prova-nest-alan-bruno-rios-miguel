@@ -16,7 +16,16 @@ import { GraphQLModule } from '@nestjs/graphql';
     AccessprofileModule,
     BetModule,
     AuthModule,
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'rootPassword',
+      database: 'provaNest',
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: false, //isso e perigoso e modo de producao! Se true, os modelos serao carregados automaticamente. Ou seja, se criar uma model por exemplo, ele poderia automaticamente colocar no banco de dados
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       playground: true,

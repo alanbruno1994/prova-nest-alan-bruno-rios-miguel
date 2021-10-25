@@ -9,12 +9,13 @@ import {
 
 //Aqui ficaria a timpagem da entidader user que tem por sua vez uma tabela no banco de dados
 @ObjectType() //Aqui esta dizendo para o GraphQl que uma tipagem
-@Entity() //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
+@Entity({ name: 'access_profiles' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class AcessProfile {
   @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
   @Field(() => ID) //aqui para ser usado pelo GraphQl
   id: number;
 
+  @Field()
   @Column()
   public level: string;
 

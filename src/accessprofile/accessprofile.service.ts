@@ -22,7 +22,7 @@ export class AccessprofileService {
     const access = await this.accessRepository.create(data);
     const accessSaved = await this.accessRepository.save(access);
     if (!accessSaved) {
-      throw new InternalServerErrorException('Game not created');
+      throw new InternalServerErrorException('Access Profile not created');
     }
     return accessSaved;
   }
@@ -52,7 +52,15 @@ export class AccessprofileService {
   async findById(id: number) {
     const access = await this.accessRepository.findOne(id);
     if (!access) {
-      throw new NotFoundException('Game not found');
+      throw new NotFoundException('Access Profile not found');
+    }
+    return access;
+  }
+
+  async findByLevel(level: string) {
+    const access = await this.accessRepository.findOne({ where: { level } });
+    if (!access) {
+      throw new NotFoundException('Access Profile not found');
     }
     return access;
   }

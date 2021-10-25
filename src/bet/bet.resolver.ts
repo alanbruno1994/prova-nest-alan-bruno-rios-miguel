@@ -1,3 +1,4 @@
+import { Admin } from '../auth/admin.guard';
 import { UpdateBetInput } from './dto/update-bet.input';
 import { BetService } from './bet.service';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -10,15 +11,19 @@ import { Bet } from './bet.entity';
 export class BetResolver {
   constructor(private betService: BetService) {}
   //@Args significa que vai ter uma entreada de dados
-  @Mutation(() => Bet)
-  async createGame(@Args('data') data: CreateBetInput): Promise<Bet[]> {
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => [Bet])
+  async createBet(
+    @Args({ name: 'data', type: () => [CreateBetInput] })
+    data: CreateBetInput,
+  ): Promise<Bet[]> {
     const bet = await this.betService.createBet(data);
     return bet;
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Bet)
-  async updateUser(
+  async updateBet(
     @Args('id') id: number,
     @Args('data') data: UpdateBetInput,
   ): Promise<Bet> {
@@ -28,21 +33,21 @@ export class BetResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: number): Promise<boolean> {
+  async deleteBet(@Args('id') id: number): Promise<boolean> {
     const deleteUser = await this.betService.deleteBet(id);
     return deleteUser;
   }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [Bet])
-  async users(): Promise<Bet[]> {
+  async bets(): Promise<Bet[]> {
     const bets = await this.betService.findAllBets();
     return bets;
   }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => Bet)
-  async user(@Args('id') id: number): Promise<Bet> {
+  async bet(@Args('id') id: number): Promise<Bet> {
     const bet = await this.betService.findById(id);
     return bet;
   }

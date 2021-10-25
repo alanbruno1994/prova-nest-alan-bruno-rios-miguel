@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class accessprofiles1634860389734 implements MigrationInterface {
+export class createdGame1634945161447 implements MigrationInterface {
   private table = new Table({
-    name: 'access_profiles',
+    name: 'games',
     columns: [
       {
         name: 'id',
@@ -12,9 +12,36 @@ export class accessprofiles1634860389734 implements MigrationInterface {
         generationStrategy: 'increment',
       },
       {
-        name: 'level',
+        name: 'type_game',
         type: 'varchar',
-        length: '255',
+        length: '120',
+        isNullable: false,
+        isUnique: true,
+      },
+      {
+        name: 'description',
+        type: 'text',
+        isNullable: false,
+      },
+      {
+        name: 'range',
+        type: 'INTEGER',
+        isNullable: false,
+      },
+      {
+        name: 'price',
+        type: 'float',
+        isNullable: false,
+      },
+      {
+        name: 'max_number',
+        type: 'INTEGER',
+        isNullable: false,
+      },
+      {
+        name: 'color',
+        type: 'varchar',
+        length: '120',
         isNullable: false,
       },
       {

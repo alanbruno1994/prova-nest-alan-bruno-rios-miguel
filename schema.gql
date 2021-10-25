@@ -1,0 +1,136 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  accessProfileId: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AcessProfile {
+  id: ID!
+  level: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Game {
+  id: ID!
+  typeGame: String!
+  description: String!
+  range: Float!
+  price: Float!
+  maxNumber: Float!
+  color: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AuthType {
+  user: User!
+  token: String!
+}
+
+type Bet {
+  id: ID!
+  numberChoose: String!
+  userId: Float!
+  gameId: Float!
+  priceGame: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Float!): User!
+  accessProfiles: [AcessProfile!]!
+  accessProfile(id: Float!): AcessProfile!
+  games: [Game!]!
+  game(id: Float!): Game!
+  bets: [Bet!]!
+  bet(id: Float!): Bet!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  createUserAdmin(data: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!, id: Float!): User!
+  deleteUser(id: Float!): Boolean!
+  createAccessProfile(data: CreateAccessProfileInput!): AcessProfile!
+  updateAccessProfile(data: UpdateAccessProfileInput!, id: Float!): AcessProfile!
+  deleteAccessProfile(id: Float!): Boolean!
+  createGame(data: CreateGameInput!): Game!
+  updateGame(data: UpdateGameInput!, id: Float!): Game!
+  deleteGame(id: Float!): Boolean!
+  createBet(data: [CreateBetInput!]!): [Bet!]!
+  updateBet(data: UpdateBetInput!, id: Float!): Bet!
+  deleteBet(id: Float!): Boolean!
+  login(data: AuthInput!): AuthType!
+}
+
+input CreateUserInput {
+  name: String!
+  password: String!
+  email: String!
+}
+
+input UpdateUserInput {
+  name: String!
+  password: String!
+  email: String!
+}
+
+input CreateAccessProfileInput {
+  level: String!
+}
+
+input UpdateAccessProfileInput {
+  level: String!
+}
+
+input CreateGameInput {
+  typeGame: String!
+  description: String!
+  color: String!
+  maxNumber: Float!
+  range: Float!
+  price: Float!
+}
+
+input UpdateGameInput {
+  typeGame: String!
+  description: String!
+  color: String!
+  maxNumber: Float!
+  range: Float!
+  price: Float!
+}
+
+input CreateBetInput {
+  bets: [Bets!]!
+}
+
+input Bets {
+  numberChoose: String!
+  gameId: Float!
+}
+
+input UpdateBetInput {
+  numberChoose: String!
+  gameId: Float!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
+}

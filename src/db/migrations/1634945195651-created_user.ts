@@ -1,3 +1,4 @@
+import { hashPasswordTransform } from '../../common/crypto';
 import {
   MigrationInterface,
   QueryRunner,
@@ -5,7 +6,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class user1634860067753 implements MigrationInterface {
+export class createdUser1634945195651 implements MigrationInterface {
   private table = new Table({
     name: 'users',
     columns: [
@@ -17,10 +18,17 @@ export class user1634860067753 implements MigrationInterface {
         generationStrategy: 'increment',
       },
       {
+        name: 'name',
+        type: 'varchar',
+        length: '255',
+        isNullable: false,
+      },
+      {
         name: 'email',
         type: 'varchar',
         length: '255',
         isNullable: false,
+        isUnique: true,
       },
       {
         name: 'password',
@@ -59,6 +67,12 @@ export class user1634860067753 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.createTable(this.table);
     await queryRunner.createForeignKey('users', this.foreignKey);
+    let senha = hashPasswordTransform.to('123');
+    await queryRunner.query(
+      `INSERT INTO users (name,email,password,access_profile_id) VALUES ('bruno','admin123@gmail.com','` +
+        senha +
+        `',2)`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {

@@ -1,8 +1,8 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createdGames1634860935396 implements MigrationInterface {
+export class createdAccessProfile1634945134686 implements MigrationInterface {
   private table = new Table({
-    name: 'games',
+    name: 'access_profiles',
     columns: [
       {
         name: 'id',
@@ -12,35 +12,9 @@ export class createdGames1634860935396 implements MigrationInterface {
         generationStrategy: 'increment',
       },
       {
-        name: 'type_game',
+        name: 'level',
         type: 'varchar',
-        length: '120',
-        isNullable: false,
-      },
-      {
-        name: 'description',
-        type: 'text',
-        isNullable: false,
-      },
-      {
-        name: 'range',
-        type: 'INTEGER',
-        isNullable: false,
-      },
-      {
-        name: 'price',
-        type: 'float',
-        isNullable: false,
-      },
-      {
-        name: 'max_number',
-        type: 'INTEGER',
-        isNullable: false,
-      },
-      {
-        name: 'color',
-        type: 'varchar',
-        length: '120',
+        length: '255',
         isNullable: false,
       },
       {
@@ -60,6 +34,12 @@ export class createdGames1634860935396 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.createTable(this.table);
+    await queryRunner.query(
+      `INSERT INTO access_profiles (level) VALUES ('player')`,
+    );
+    await queryRunner.query(
+      `INSERT INTO access_profiles (level) VALUES ('admin')`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {

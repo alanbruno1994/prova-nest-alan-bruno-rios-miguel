@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class createdBets1634861233353 implements MigrationInterface {
+export class createdBet1634945205085 implements MigrationInterface {
   private table = new Table({
     name: 'bets',
     columns: [
@@ -24,6 +24,11 @@ export class createdBets1634861233353 implements MigrationInterface {
       {
         name: 'game_id',
         type: 'INTEGER',
+        isNullable: false,
+      },
+      {
+        name: 'price_game',
+        type: 'FLOAT',
         isNullable: false,
       },
       {

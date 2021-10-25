@@ -11,7 +11,7 @@ export class AccessprofileResolver {
   constructor(private accessService: AccessprofileService) {}
   //@Args significa que vai ter uma entreada de dados
   @Mutation(() => AcessProfile)
-  async createGame(
+  async createAccessProfile(
     @Args('data') data: CreateAccessProfileInput,
   ): Promise<AcessProfile> {
     const access = await this.accessService.createAccessProfile(data);
@@ -20,7 +20,7 @@ export class AccessprofileResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => AcessProfile)
-  async updateUser(
+  async updateAccessProfile(
     @Args('id') id: number,
     @Args('data') data: UpdateAccessProfileInput,
   ): Promise<AcessProfile> {
@@ -30,21 +30,21 @@ export class AccessprofileResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: number): Promise<boolean> {
+  async deleteAccessProfile(@Args('id') id: number): Promise<boolean> {
     const deleteUser = await this.accessService.deleteAccessProfile(id);
     return deleteUser;
   }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [AcessProfile])
-  async users(): Promise<AcessProfile[]> {
+  async accessProfiles(): Promise<AcessProfile[]> {
     const access = await this.accessService.findAllAccessProfile();
     return access;
   }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => AcessProfile)
-  async user(@Args('id') id: number): Promise<AcessProfile> {
+  async accessProfile(@Args('id') id: number): Promise<AcessProfile> {
     const access = await this.accessService.findById(id);
     return access;
   }

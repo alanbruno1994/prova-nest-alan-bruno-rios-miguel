@@ -10,20 +10,22 @@ import {
 
 //Aqui ficaria a timpagem da entidader user que tem por sua vez uma tabela no banco de dados
 @ObjectType() //Aqui esta dizendo para o GraphQl que uma tipagem
-@Entity() //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
+@Entity({ name: 'users' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class User {
   @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
   @Field(() => ID) //aqui para ser usado pelo GraphQl
   id: number;
 
   //para nao precisa colocar um campo field voce instalar o plugin(https://docs.nestjs.com/graphql/cli-plugin) no arquivo nest-cli.json
-
+  @Field()
   @Column() //informa para o typeorm que isso e uma coluna
   name: string;
 
+  @Field()
   @Column()
   email: string;
 
+  @Field()
   @Column({ name: 'access_profile_id' })
   public accessProfileId: number;
 

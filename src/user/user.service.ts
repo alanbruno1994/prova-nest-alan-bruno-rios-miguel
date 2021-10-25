@@ -8,16 +8,35 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './user.entity';
+import { AccessprofileService } from 'src/accessprofile/accessprofile.service';
 
 @Injectable() //Aqui e para fazer injecao de dependecnia
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private accessService: AccessprofileService,
   ) {}
 
   async createUser(data: CreateUserInput): Promise<User> {
-    const user = await this.userRepository.create(data);
+    let access = await this.accessService.findByLevel('client');
+    const user = await this.userRepository.create({
+      ...data,
+      accessProfileId: access.id,
+    });
+    const userSaved = await this.userRepository.save(user);
+    if (!userSaved) {
+      throw new InternalServerErrorException('User not created');
+    }
+    return userSaved;
+  }
+
+  async createUserAdmin(data: CreateUserInput): Promise<User> {
+    let access = await this.accessService.findByLevel('admin');
+    const user = await this.userRepository.create({
+      ...data,
+      accessProfileId: access.id,
+    });
     const userSaved = await this.userRepository.save(user);
     if (!userSaved) {
       throw new InternalServerErrorException('User not created');
