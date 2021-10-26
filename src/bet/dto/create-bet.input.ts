@@ -16,8 +16,6 @@ export class Bets {
   @Length(2, 255)
   numberChoose: string;
   @Field()
-  @IsNumber()
-  @IsNotEmpty()
   gameId: number;
 }
 

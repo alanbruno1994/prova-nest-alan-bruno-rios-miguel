@@ -12,6 +12,12 @@ import { Bet } from './bet.entity';
 import { UpdateBetInput } from './dto/update-bet.input';
 import { CONTEXT } from '@nestjs/graphql';
 import { GameService } from 'src/game/game.service';
+import { getConnection } from 'typeorm';
+
+interface Action {
+  code: number;
+  bets: Bet[];
+}
 
 @Injectable({ scope: Scope.REQUEST })
 export class BetService {
@@ -23,43 +29,67 @@ export class BetService {
   ) {}
 
   async createBet(data: CreateBetInput): Promise<Bet[]> {
-    return await this.forBets(data, this.context.req.user.id);
-  }
-
-  async forBets(data: CreateBetInput, userID: number): Promise<Bet[]> {
-    let betsSaved: Bet[] = [];
-    return new Promise<Bet[]>(async (resolve, reject) => {
-      let bets = data[0].bets;
-      await bets.forEach(async (v: Bets, index, array) => {
-        await this.save(v, betsSaved, userID);
-        if (array.length === index + 1) {
-          resolve(betsSaved);
-        }
+    const connection = getConnection();
+    const queryRunner = connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    let bets: Bet[] = [];
+    for (let bet of data[0].bets) {
+      let game = await this.gameService.findById(bet.gameId);
+      if (!game) {
+        await queryRunner.rollbackTransaction();
+        throw new InternalServerErrorException('Game not found');
+      }
+      if (!this.validateNumber(game.range, bet.numberChoose)) {
+        await queryRunner.rollbackTransaction();
+        throw new InternalServerErrorException(
+          'Bet not created due to poorly formatted number',
+        );
+      }
+      const betCreate = await this.betRepository.create({
+        gameId: game.id,
+        numberChoose: bet.numberChoose,
+        priceGame: game.price,
+        userId: this.context.req.user.id,
       });
-    });
+      await queryRunner.manager.save(betCreate);
+      bets.push(betCreate);
+    }
+    await queryRunner.commitTransaction();
+    await queryRunner.release();
+    return bets;
   }
 
-  async save(value: Bets, betsSave: Bet[], userId): Promise<Bet[]> {
-    let game = await this.gameService.findById(value.gameId);
-    const bet = await this.betRepository.create({
-      gameId: game.id,
-      numberChoose: value.numberChoose,
-      priceGame: game.price,
-      userId,
-    });
-    const betSaved = await this.betRepository.save(bet);
-    if (!betSaved) {
-      throw new InternalServerErrorException('Bet not created');
-    }
-    betsSave.push(betSaved);
-    return betsSave;
+  validateNumber(qtd: number, numberChoose: string) {
+    return numberChoose.match(/\d+/g).length === qtd;
   }
 
   async updateBet(id: number, data: UpdateBetInput): Promise<Bet> {
     const bet = await this.findById(id);
-    await this.betRepository.update(bet, { ...data });
-    const betUpdate = await this.betRepository.create({ ...bet, ...data });
-    return betUpdate;
+    if (data.gameId) {
+      let game = await this.gameService.findById(data.gameId);
+      if (!game) {
+        throw new InternalServerErrorException('Game not found');
+      }
+      if (data.numberChoose) {
+        if (!this.validateNumber(game.range, bet.numberChoose)) {
+          throw new InternalServerErrorException(
+            'Bet not created due to poorly formatted number',
+          );
+        }
+      }
+      await this.betRepository.update(bet, { ...data, priceGame: game.price });
+      const betUpdate = await this.betRepository.create({
+        ...bet,
+        ...data,
+        priceGame: game.price,
+      });
+      return betUpdate;
+    } else {
+      await this.betRepository.update(bet, { ...data });
+      const betUpdate = await this.betRepository.create({ ...bet, ...data });
+      return betUpdate;
+    }
   }
 
   async deleteBet(id: number): Promise<boolean> {

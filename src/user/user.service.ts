@@ -5,10 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { JoinColumn, ManyToOne, Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './user.entity';
 import { AccessprofileService } from 'src/accessprofile/accessprofile.service';
+import { AcessProfile } from 'src/accessprofile/accessprofile.entity';
 
 @Injectable() //Aqui e para fazer injecao de dependecnia
 export class UserService {
@@ -19,7 +20,7 @@ export class UserService {
   ) {}
 
   async createUser(data: CreateUserInput): Promise<User> {
-    let access = await this.accessService.findByLevel('client');
+    let access = await this.accessService.findByLevel('player');
     const user = await this.userRepository.create({
       ...data,
       accessProfileId: access.id,

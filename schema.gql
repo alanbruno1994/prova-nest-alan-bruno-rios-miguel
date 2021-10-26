@@ -2,13 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type AcessProfile {
   id: ID!
-  name: String!
-  email: String!
-  accessProfileId: Float!
+  level: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  userConnection: [User!]!
 }
 
 """
@@ -16,11 +15,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type AcessProfile {
+type User {
   id: ID!
-  level: String!
+  name: String!
+  email: String!
+  accessProfileId: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
+  accessConnection: AcessProfile!
 }
 
 type Game {
@@ -85,9 +87,9 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  name: String!
-  password: String!
-  email: String!
+  name: String
+  password: String
+  email: String
 }
 
 input CreateAccessProfileInput {
@@ -95,7 +97,7 @@ input CreateAccessProfileInput {
 }
 
 input UpdateAccessProfileInput {
-  level: String!
+  level: String
 }
 
 input CreateGameInput {
@@ -108,12 +110,12 @@ input CreateGameInput {
 }
 
 input UpdateGameInput {
-  typeGame: String!
-  description: String!
-  color: String!
-  maxNumber: Float!
-  range: Float!
-  price: Float!
+  typeGame: String
+  description: String
+  color: String
+  maxNumber: Float
+  range: Float
+  price: Float
 }
 
 input CreateBetInput {
@@ -126,8 +128,8 @@ input Bets {
 }
 
 input UpdateBetInput {
-  numberChoose: String!
-  gameId: Float!
+  numberChoose: String
+  gameId: Float
 }
 
 input AuthInput {

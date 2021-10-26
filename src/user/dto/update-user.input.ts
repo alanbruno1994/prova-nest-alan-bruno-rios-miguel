@@ -13,16 +13,16 @@ export class UpdateUserInput {
   @Length(10, 255)
   @IsNotEmpty({ message: 'The field is required' })
   @IsOptional()
-  name: string;
+  name?: string;
   @Field()
   @IsString()
   @Length(6, 15)
   @IsNotEmpty({ message: 'The field is required' })
   @IsOptional()
-  password: string;
+  password?: string;
   @Field()
   @IsEmail()
   @IsNotEmpty({ message: 'The field is required' })
   @IsOptional()
-  email: string;
+  email?: string;
 }

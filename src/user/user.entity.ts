@@ -1,12 +1,21 @@
-import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  HideField,
+  ID,
+  ObjectType,
+  ResolveField,
+} from '@nestjs/graphql';
 import { hashPasswordTransform } from '../common/crypto';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AcessProfile } from 'src/accessprofile/accessprofile.entity';
 
 //Aqui ficaria a timpagem da entidader user que tem por sua vez uma tabela no banco de dados
 @ObjectType() //Aqui esta dizendo para o GraphQl que uma tipagem
@@ -40,4 +49,10 @@ export class User {
   @Field()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(() => AcessProfile, (access) => access.userConnection, {
+    primary: true,
+  })
+  @JoinColumn({ name: 'access_profile_id' })
+  accessConnection: Promise<AcessProfile>;
 }

@@ -1,8 +1,10 @@
+import { User } from 'src/user/user.entity';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,4 +28,8 @@ export class AcessProfile {
   @Field()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  // Associations
+  @OneToMany(() => User, (user) => user.accessConnection)
+  userConnection: Promise<User[]>;
 }

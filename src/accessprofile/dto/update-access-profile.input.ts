@@ -8,5 +8,5 @@ export class UpdateAccessProfileInput {
   @Length(3, 255)
   @IsNotEmpty({ message: 'The field is required' })
   @IsOptional()
-  level: string;
+  level?: string;
 }
