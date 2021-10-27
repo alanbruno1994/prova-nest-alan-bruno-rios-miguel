@@ -1,34 +1,29 @@
+import { UserService } from './../user/user.service';
 import {
-  Inject,
-  Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Scope,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Bets, CreateBetInput } from './dto/create-bet.input';
+import { CreateBetInput } from './dto/create-bet.input';
 import { Bet } from './bet.entity';
 import { UpdateBetInput } from './dto/update-bet.input';
-import { CONTEXT } from '@nestjs/graphql';
-import { GameService } from 'src/game/game.service';
+import { GameService } from '../game/game.service';
 import { getConnection } from 'typeorm';
 
-interface Action {
-  code: number;
-  bets: Bet[];
-}
-
-@Injectable({ scope: Scope.REQUEST })
 export class BetService {
   constructor(
     @InjectRepository(Bet)
     private betRepository: Repository<Bet>,
-    @Inject(CONTEXT) private context,
     private gameService: GameService,
+    private userService: UserService,
   ) {}
 
-  async createBet(data: CreateBetInput): Promise<Bet[]> {
+  async createBet(data: CreateBetInput, userId: number): Promise<Bet[]> {
+    let user = await this.userService.findById(userId);
+    if (!user) {
+      throw new InternalServerErrorException('User not found');
+    }
     const connection = getConnection();
     const queryRunner = connection.createQueryRunner();
     await queryRunner.connect();
@@ -50,7 +45,7 @@ export class BetService {
         gameId: game.id,
         numberChoose: bet.numberChoose,
         priceGame: game.price,
-        userId: this.context.req.user.id,
+        userId,
       });
       await queryRunner.manager.save(betCreate);
       bets.push(betCreate);
@@ -65,7 +60,10 @@ export class BetService {
   }
 
   async updateBet(id: number, data: UpdateBetInput): Promise<Bet> {
-    const bet = await this.findById(id);
+    const bet = await this.betRepository.findOne(id);
+    if (!bet) {
+      throw new NotFoundException('Bet not found');
+    }
     if (data.gameId) {
       let game = await this.gameService.findById(data.gameId);
       if (!game) {
@@ -93,7 +91,10 @@ export class BetService {
   }
 
   async deleteBet(id: number): Promise<boolean> {
-    const bet = await this.findById(id);
+    const bet = await this.betRepository.findOne(id);
+    if (!bet) {
+      throw new NotFoundException('Bet not found');
+    }
     const betDelete = await this.betRepository.delete(bet);
     if (betDelete) {
       return true;

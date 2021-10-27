@@ -5,11 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinColumn, ManyToOne, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './user.entity';
-import { AccessprofileService } from 'src/accessprofile/accessprofile.service';
-import { AcessProfile } from 'src/accessprofile/accessprofile.entity';
+import { AccessprofileService } from '../accessprofile/accessprofile.service';
 
 @Injectable() //Aqui e para fazer injecao de dependecnia
 export class UserService {
@@ -46,7 +45,10 @@ export class UserService {
   }
 
   async updateUser(id: number, data: UpdateUserInput): Promise<User> {
-    const user = await this.findById(id);
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     await this.userRepository.update(user, { ...data });
     const userUpdate = await this.userRepository.create({ ...user, ...data });
     return userUpdate;
@@ -61,7 +63,10 @@ export class UserService {
   }
 
   async deleteUser(id: number): Promise<boolean> {
-    const user = await this.findById(id);
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     const userDelete = await this.userRepository.delete(user);
     if (userDelete) {
       return true;

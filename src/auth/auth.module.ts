@@ -1,4 +1,3 @@
-import { Admin } from './admin.guard';
 import { UserModule } from './../user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
@@ -6,8 +5,8 @@ import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './ jwt.strategy';
-import { User } from 'src/user/user.entity';
-import { AccessprofileModule } from 'src/accessprofile/accessprofile.module';
+import { User } from '../user/user.entity';
+import { AccessprofileModule } from '../accessprofile/accessprofile.module';
 
 @Module({
   imports: [

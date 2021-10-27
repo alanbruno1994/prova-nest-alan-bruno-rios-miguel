@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
-import { AccessprofileModule } from 'src/accessprofile/accessprofile.module';
+import { AccessprofileModule } from '../accessprofile/accessprofile.module';
 
 @Module({
   imports: [AccessprofileModule, TypeOrmModule.forFeature([User])],

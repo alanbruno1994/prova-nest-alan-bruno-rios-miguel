@@ -2,29 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AcessProfile {
-  id: ID!
-  level: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  userConnection: [User!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  accessProfileId: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  accessConnection: AcessProfile!
-}
-
 type Game {
   id: ID!
   typeGame: String!
@@ -37,10 +14,10 @@ type Game {
   updatedAt: DateTime!
 }
 
-type AuthType {
-  user: User!
-  token: String!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Bet {
   id: ID!
@@ -50,13 +27,36 @@ type Bet {
   priceGame: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User
+  game: Game
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  accessProfileId: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  accessConnection: AcessProfile!
+}
+
+type AcessProfile {
+  id: ID!
+  level: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userConnection: [User!]!
+}
+
+type AuthType {
+  user: User!
+  token: String!
 }
 
 type Query {
   users: [User!]!
   user(id: Float!): User!
-  accessProfiles: [AcessProfile!]!
-  accessProfile(id: Float!): AcessProfile!
   games: [Game!]!
   game(id: Float!): Game!
   bets: [Bet!]!
@@ -68,9 +68,6 @@ type Mutation {
   createUserAdmin(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!, id: Float!): User!
   deleteUser(id: Float!): Boolean!
-  createAccessProfile(data: CreateAccessProfileInput!): AcessProfile!
-  updateAccessProfile(data: UpdateAccessProfileInput!, id: Float!): AcessProfile!
-  deleteAccessProfile(id: Float!): Boolean!
   createGame(data: CreateGameInput!): Game!
   updateGame(data: UpdateGameInput!, id: Float!): Game!
   deleteGame(id: Float!): Boolean!
@@ -90,14 +87,6 @@ input UpdateUserInput {
   name: String
   password: String
   email: String
-}
-
-input CreateAccessProfileInput {
-  level: String!
-}
-
-input UpdateAccessProfileInput {
-  level: String
 }
 
 input CreateGameInput {

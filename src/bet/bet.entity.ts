@@ -1,9 +1,15 @@
-import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
-import { hashPasswordTransform } from '../common/crypto';
+import { Game } from './../game/game.entity';
+import { User } from './../user/user.entity';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -40,4 +46,12 @@ export class Bet {
   @Field()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user?: Promise<User>;
+
+  @OneToOne(() => Game)
+  @JoinColumn({ name: 'game_id' })
+  game?: Promise<Game>;
 }

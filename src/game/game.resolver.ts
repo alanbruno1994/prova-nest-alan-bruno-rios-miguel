@@ -2,10 +2,10 @@ import { UpdateGameInput } from './dto/update-game.input';
 import { GameService } from './game.service';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateGameInput } from './dto/create-game.input';
-import { Header, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/auth.guard';
 import { Game } from './game.entity';
-import { Admin } from 'src/auth/admin.guard';
+import { Admin } from '../auth/admin.guard';
 
 @Resolver()
 export class GameResolver {

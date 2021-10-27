@@ -5,7 +5,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/create-user.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/auth.guard';
-import { Admin } from 'src/auth/admin.guard';
+import { Admin } from '../auth/admin.guard';
 
 @Resolver()
 export class UserResolver {

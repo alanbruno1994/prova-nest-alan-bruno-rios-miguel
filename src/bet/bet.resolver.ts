@@ -1,15 +1,19 @@
-import { Admin } from '../auth/admin.guard';
 import { UpdateBetInput } from './dto/update-bet.input';
 import { BetService } from './bet.service';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateBetInput } from './dto/create-bet.input';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Injectable, Scope, Inject } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/auth.guard';
 import { Bet } from './bet.entity';
+import { CONTEXT } from '@nestjs/graphql';
 
 @Resolver()
+@Injectable({ scope: Scope.REQUEST })
 export class BetResolver {
-  constructor(private betService: BetService) {}
+  constructor(
+    private betService: BetService,
+    @Inject(CONTEXT) private context,
+  ) {}
   //@Args significa que vai ter uma entreada de dados
   @UseGuards(GqlAuthGuard)
   @Mutation(() => [Bet])
@@ -17,7 +21,7 @@ export class BetResolver {
     @Args({ name: 'data', type: () => [CreateBetInput] })
     data: CreateBetInput,
   ): Promise<Bet[]> {
-    const bet = await this.betService.createBet(data);
+    const bet = await this.betService.createBet(data, this.context.req.user.id);
     return bet;
   }
 

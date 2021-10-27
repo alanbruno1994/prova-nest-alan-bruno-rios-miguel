@@ -2,11 +2,11 @@ import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
   Length,
+  Validate,
 } from 'class-validator'; //Aqui sao tipos de validacao
-import { Match } from '../match.validator';
+
 @InputType() //Aqui usamos para infomar ao GraphQl que isso e um input type
 export class CreateUserInput {
   @Field()
@@ -22,6 +22,5 @@ export class CreateUserInput {
   @Field()
   @IsEmail()
   @IsNotEmpty({ message: 'The field is required' })
-  @Match('password')
   email: string;
 }

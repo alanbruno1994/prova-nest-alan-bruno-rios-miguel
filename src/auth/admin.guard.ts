@@ -4,8 +4,8 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { GqlExecutionContext, Args } from '@nestjs/graphql';
-import { AccessprofileService } from 'src/accessprofile/accessprofile.service';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { AccessprofileService } from '../accessprofile/accessprofile.service';
 
 @Injectable()
 export class Admin implements CanActivate {
