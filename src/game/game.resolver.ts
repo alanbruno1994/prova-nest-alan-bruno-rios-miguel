@@ -9,13 +9,13 @@ import { Admin } from '../auth/admin.guard';
 
 @Resolver()
 export class GameResolver {
-  constructor(private userService: GameService) {}
+  constructor(private gameService: GameService) {}
   //@Args significa que vai ter uma entreada de dados
   @UseGuards(GqlAuthGuard, Admin)
   @Mutation(() => Game)
   async createGame(@Args('data') data: CreateGameInput): Promise<Game> {
-    const user = await this.userService.creatGame(data);
-    return user;
+    const game = await this.gameService.creatGame(data);
+    return game;
   }
 
   @UseGuards(GqlAuthGuard, Admin)
@@ -24,28 +24,28 @@ export class GameResolver {
     @Args('id') id: number,
     @Args('data') data: UpdateGameInput,
   ): Promise<Game> {
-    const user = await this.userService.updateGame(id, data);
-    return user;
+    const game = await this.gameService.updateGame(id, data);
+    return game;
   }
 
   @UseGuards(GqlAuthGuard, Admin)
   @Mutation(() => Boolean)
   async deleteGame(@Args('id') id: number): Promise<boolean> {
-    const deleteUser = await this.userService.deleteGame(id);
-    return deleteUser;
+    const deleteGame = await this.gameService.deleteGame(id);
+    return deleteGame;
   }
 
-  @UseGuards(GqlAuthGuard, Admin)
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Game])
   async games(): Promise<Game[]> {
-    const users = await this.userService.findAllGame();
-    return users;
+    const games = await this.gameService.findAllGame();
+    return games;
   }
 
-  @UseGuards(GqlAuthGuard, Admin)
+  @UseGuards(GqlAuthGuard)
   @Query(() => Game)
   async game(@Args('id') id: number): Promise<Game> {
-    const user = await this.userService.findById(id);
-    return user;
+    const game = await this.gameService.findById(id);
+    return game;
   }
 }

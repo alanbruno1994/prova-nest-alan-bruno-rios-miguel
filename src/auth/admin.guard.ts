@@ -14,8 +14,8 @@ export class Admin implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req.user;
-    let access = await this.access.findById(user.id);
-    if (access.level === 'client') {
+    let access = await this.access.findById(user.accessProfileId);
+    if (access.level === 'player') {
       throw new ForbiddenException('Account is not admin!');
     }
     return true;

@@ -1,3 +1,4 @@
+import { UniqueEmail } from './../validator/UniqueEmail';
 import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEmail,
@@ -22,5 +23,6 @@ export class CreateUserInput {
   @Field()
   @IsEmail()
   @IsNotEmpty({ message: 'The field is required' })
+  @Validate(UniqueEmail)
   email: string;
 }

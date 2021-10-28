@@ -15,7 +15,7 @@ import { AccessprofileModule } from '../accessprofile/accessprofile.module';
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
       useFactory: () => ({
-        secret: 'abc',
+        secret: process.env.SECRET_KEY,
         signOptions: {
           expiresIn: '24h',
         },

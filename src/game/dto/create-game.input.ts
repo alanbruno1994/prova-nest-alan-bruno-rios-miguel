@@ -1,3 +1,5 @@
+import { UniqueGame } from '../validator/UniqueGame';
+
 import { InputType, Field } from '@nestjs/graphql';
 import {
   IsNotEmpty,
@@ -5,6 +7,7 @@ import {
   IsString,
   Length,
   Min,
+  validate,
   Validate,
   validateSync,
 } from 'class-validator'; //Aqui sao tipos de validacao
@@ -14,27 +17,29 @@ export class CreateGameInput {
   @Field()
   @IsString()
   @Length(3, 255)
-  @IsNotEmpty({ message: 'The field is required' })
+  @IsNotEmpty({ message: 'The typeGame field is required' })
+  @Validate(UniqueGame)
   typeGame: string;
   @Field()
   @IsString()
-  @Min(3)
-  @IsNotEmpty({ message: 'The field is required' })
+  @Length(3, 255)
+  @IsNotEmpty({ message: 'The description field is required' })
   description: string;
   @Field()
   @IsString()
-  @IsNotEmpty({ message: 'The field is required' })
+  @Length(3, 255)
+  @IsNotEmpty({ message: 'The color field  is required' })
   color: string;
   @Field()
   @IsNumber()
-  @IsNotEmpty({ message: 'The field is required' })
+  @IsNotEmpty({ message: 'The maxNumber field is required' })
   maxNumber: number;
   @Field()
   @IsNumber()
-  @IsNotEmpty({ message: 'The field is required' })
+  @IsNotEmpty({ message: 'The range field is required' })
   range: number;
   @Field()
   @IsNumber()
-  @IsNotEmpty({ message: 'The field is required' })
+  @IsNotEmpty({ message: 'The price field is required' })
   price: number;
 }

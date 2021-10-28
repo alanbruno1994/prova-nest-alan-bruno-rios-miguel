@@ -29,12 +29,8 @@ export class BetService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     let bets: Bet[] = [];
-    for (let bet of data[0].bets) {
+    for (let bet of data.bets) {
       let game = await this.gameService.findById(bet.gameId);
-      if (!game) {
-        await queryRunner.rollbackTransaction();
-        throw new InternalServerErrorException('Game not found');
-      }
       if (!this.validateNumber(game.range, bet.numberChoose)) {
         await queryRunner.rollbackTransaction();
         throw new InternalServerErrorException(
@@ -66,9 +62,6 @@ export class BetService {
     }
     if (data.gameId) {
       let game = await this.gameService.findById(data.gameId);
-      if (!game) {
-        throw new InternalServerErrorException('Game not found');
-      }
       if (data.numberChoose) {
         if (!this.validateNumber(game.range, bet.numberChoose)) {
           throw new InternalServerErrorException(
@@ -76,7 +69,7 @@ export class BetService {
           );
         }
       }
-      await this.betRepository.update(bet, { ...data, priceGame: game.price });
+      await this.betRepository.update(id, { ...data, priceGame: game.price });
       const betUpdate = await this.betRepository.create({
         ...bet,
         ...data,

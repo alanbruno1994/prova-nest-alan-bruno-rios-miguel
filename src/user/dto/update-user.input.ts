@@ -1,3 +1,4 @@
+import { UniqueEmail } from './../validator/UniqueEmail';
 import { InputType, Field } from '@nestjs/graphql';
 import {
   IsEmail,
@@ -5,6 +6,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  Validate,
 } from 'class-validator'; //Aqui sao tipos de validacao
 @InputType() //Aqui usamos para infomar ao GraphQl que isso e um input type
 export class UpdateUserInput {
@@ -23,6 +25,7 @@ export class UpdateUserInput {
   @Field()
   @IsEmail()
   @IsNotEmpty({ message: 'The field is required' })
+  @Validate(UniqueEmail)
   @IsOptional()
   email?: string;
 }

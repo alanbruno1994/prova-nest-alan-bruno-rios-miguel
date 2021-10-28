@@ -31,8 +31,11 @@ export class AccessprofileService {
     id: number,
     data: UpdateAccessProfileInput,
   ): Promise<AcessProfile> {
-    const access = await this.findById(id);
-    await this.accessRepository.update(access, { ...data });
+    const access = await this.accessRepository.findOne(id);
+    if (!access) {
+      throw new NotFoundException('Access profile not found');
+    }
+    await this.accessRepository.update(id, { ...data });
     const accessUpdate = await this.accessRepository.create({
       ...access,
       ...data,
@@ -41,7 +44,10 @@ export class AccessprofileService {
   }
 
   async deleteAccessProfile(id: number): Promise<boolean> {
-    const access = await this.findById(id);
+    const access = await this.accessRepository.findOne(id);
+    if (!access) {
+      throw new NotFoundException('Access profile not found');
+    }
     const accessDelete = await this.accessRepository.delete(access);
     if (accessDelete) {
       return true;

@@ -1,3 +1,4 @@
+import { UniqueEmail } from './validator/UniqueEmail';
 import { User } from './user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
@@ -7,7 +8,7 @@ import { AccessprofileModule } from '../accessprofile/accessprofile.module';
 
 @Module({
   imports: [AccessprofileModule, TypeOrmModule.forFeature([User])],
-  providers: [UserService, UserResolver],
+  providers: [UserService, UserResolver, UniqueEmail],
   exports: [UserService],
 })
 export class UserModule {}

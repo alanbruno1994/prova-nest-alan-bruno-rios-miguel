@@ -1,5 +1,6 @@
 import { UpdateGameInput } from './dto/update-game.input';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -8,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateGameInput } from './dto/create-game.input';
 import { Game } from './game.entity';
+import { validate } from 'class-validator';
 
 @Injectable() //Aqui e para fazer injecao de dependecnia
 export class GameService {
@@ -26,15 +28,21 @@ export class GameService {
   }
 
   async updateGame(id: number, data: UpdateGameInput): Promise<Game> {
-    const game = await this.findById(id);
-    await this.gameRepository.update(game, { ...data });
+    const game = await this.gameRepository.findOne(id);
+    if (!game) {
+      throw new NotFoundException('Game not found');
+    }
+    await this.gameRepository.update(id, { ...data });
     const gameUpdate = await this.gameRepository.create({ ...game, ...data });
     return gameUpdate;
   }
 
   async deleteGame(id: number): Promise<boolean> {
-    const game = await this.findById(id);
-    const gameDelete = await this.gameRepository.delete(game);
+    const game = await this.gameRepository.findOne(id);
+    if (!game) {
+      throw new NotFoundException('Game not found');
+    }
+    const gameDelete = await this.gameRepository.delete(id);
     if (gameDelete) {
       return true;
     }
@@ -43,6 +51,14 @@ export class GameService {
 
   async findById(id: number) {
     const game = await this.gameRepository.findOne(id);
+    if (!game) {
+      throw new NotFoundException('Game not found');
+    }
+    return game;
+  }
+
+  async findByTypeGame(typeGame: string) {
+    const game = await this.gameRepository.findOne({ where: { typeGame } });
     if (!game) {
       throw new NotFoundException('Game not found');
     }

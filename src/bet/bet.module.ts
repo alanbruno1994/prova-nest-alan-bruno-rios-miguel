@@ -1,3 +1,4 @@
+import { GameExist } from './validator/GameExist';
 import { UserModule } from './../user/user.module';
 import { AuthModule } from './../auth/auth.module';
 import { GameModule } from './../game/game.module';
@@ -16,7 +17,7 @@ import { AccessprofileModule } from '../accessprofile/accessprofile.module';
     AuthModule,
     AccessprofileModule,
   ],
-  providers: [BetService, BetResolver],
+  providers: [BetService, BetResolver, GameExist],
   exports: [BetService],
 })
 export class BetModule {}

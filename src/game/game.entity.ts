@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -11,12 +11,12 @@ import {
 @ObjectType() //Aqui esta dizendo para o GraphQl que uma tipagem
 @Entity({ name: 'games' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class Game {
-  @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
-  @Field(() => ID) //aqui para ser usado pelo GraphQl
+  @PrimaryGeneratedColumn('increment') //aqui informa ao typeorm que isso seria o id
+  @Field(() => Int) //aqui para ser usado pelo GraphQl
   id: number;
 
   @Field()
-  @Column({ name: 'type_game' })
+  @Column({ name: 'type_game', unique: true })
   typeGame: string;
 
   @Field()

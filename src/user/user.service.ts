@@ -49,7 +49,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    await this.userRepository.update(user, { ...data });
+    await this.userRepository.update(id, { ...data });
     const userUpdate = await this.userRepository.create({ ...user, ...data });
     return userUpdate;
   }
@@ -67,7 +67,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const userDelete = await this.userRepository.delete(user);
+    const userDelete = await this.userRepository.delete(id);
     if (userDelete) {
       return true;
     }

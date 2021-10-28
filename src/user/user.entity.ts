@@ -1,5 +1,5 @@
 import { Bet } from './../bet/bet.entity';
-import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType, Int } from '@nestjs/graphql';
 import { hashPasswordTransform } from '../common/crypto';
 import {
   Column,
@@ -17,8 +17,8 @@ import { AcessProfile } from '../accessprofile/accessprofile.entity';
 @ObjectType() //Aqui esta dizendo para o GraphQl que uma tipagem
 @Entity({ name: 'users' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class User {
-  @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
-  @Field(() => ID) //aqui para ser usado pelo GraphQl
+  @PrimaryGeneratedColumn('increment') //aqui informa ao typeorm que isso seria o id
+  @Field(() => Int) //aqui para ser usado pelo GraphQl
   id: number;
 
   //para nao precisa colocar um campo field voce instalar o plugin(https://docs.nestjs.com/graphql/cli-plugin) no arquivo nest-cli.json
@@ -27,7 +27,7 @@ export class User {
   name: string;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Field()

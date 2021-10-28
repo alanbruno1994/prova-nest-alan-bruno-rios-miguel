@@ -1,5 +1,13 @@
+import { GameExist } from './../validator/GameExist';
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString, Length, Min } from 'class-validator'; //Aqui sao tipos de validacao
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  Min,
+  Validate,
+} from 'class-validator'; //Aqui sao tipos de validacao
 
 @InputType() //Aqui usamos para infomar ao GraphQl que isso e um input type
 export class UpdateBetInput {
@@ -10,7 +18,8 @@ export class UpdateBetInput {
   numberChoose?: string;
   @Field()
   @IsNumber()
-  @Min(0)
+  @Min(1)
   @IsOptional()
+  @Validate(GameExist)
   gameId?: number;
 }

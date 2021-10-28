@@ -1,3 +1,4 @@
+import { Admin } from './../auth/admin.guard';
 import { UpdateBetInput } from './dto/update-bet.input';
 import { BetService } from './bet.service';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -18,14 +19,14 @@ export class BetResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => [Bet])
   async createBet(
-    @Args({ name: 'data', type: () => [CreateBetInput] })
+    @Args({ name: 'data', type: () => CreateBetInput })
     data: CreateBetInput,
   ): Promise<Bet[]> {
     const bet = await this.betService.createBet(data, this.context.req.user.id);
     return bet;
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, Admin)
   @Mutation(() => Bet)
   async updateBet(
     @Args('id') id: number,
@@ -35,7 +36,7 @@ export class BetResolver {
     return bet;
   }
 
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard, Admin)
   @Mutation(() => Boolean)
   async deleteBet(@Args('id') id: number): Promise<boolean> {
     const deleteUser = await this.betService.deleteBet(id);

@@ -1,6 +1,6 @@
 import { Game } from './../game/game.entity';
 import { User } from './../user/user.entity';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 
 import {
   Column,
@@ -19,7 +19,7 @@ import {
 @Entity({ name: 'bets' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class Bet {
   @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
-  @Field(() => ID) //aqui para ser usado pelo GraphQl
+  @Field(() => Int) //aqui para ser usado pelo GraphQl
   id: number;
 
   //para nao precisa colocar um campo field voce instalar o plugin(https://docs.nestjs.com/graphql/cli-plugin) no arquivo nest-cli.json

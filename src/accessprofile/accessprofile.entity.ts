@@ -1,5 +1,5 @@
 import { User } from '../user/user.entity';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Int } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -14,7 +14,7 @@ import {
 @Entity({ name: 'access_profiles' }) //Aqui esta dizendo para o TypeOrm que isso sera uma entidade
 export class AcessProfile {
   @PrimaryGeneratedColumn() //aqui informa ao typeorm que isso seria o id
-  @Field(() => ID) //aqui para ser usado pelo GraphQl
+  @Field(() => Int) //aqui para ser usado pelo GraphQl
   id: number;
 
   @Field()
