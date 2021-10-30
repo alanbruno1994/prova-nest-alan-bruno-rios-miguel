@@ -7,6 +7,7 @@ import {
   Length,
   Validate,
 } from 'class-validator'; //Aqui sao tipos de validacao
+import { MatchPassword } from '../validator/MatchPassword';
 
 @InputType() //Aqui usamos para infomar ao GraphQl que isso e um input type
 export class CreateUserInput {
@@ -19,10 +20,16 @@ export class CreateUserInput {
   @IsString()
   @Length(6, 15)
   @IsNotEmpty({ message: 'The field is required' })
+  @MatchPassword('passwordConfirmation',{message:'Password did not match'})
   password: string;
   @Field()
   @IsEmail()
   @IsNotEmpty({ message: 'The field is required' })
   @Validate(UniqueEmail)
   email: string;
+  @Field()
+  @IsString()
+  @Length(6, 15)
+  @IsNotEmpty({ message: 'The field is required' })  
+  passwordConfirmation: string;
 }

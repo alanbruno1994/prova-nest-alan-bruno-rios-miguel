@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:lts-alpine
 
 RUN mkdir -p /home/node/app/node_modules
 

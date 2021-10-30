@@ -81,12 +81,14 @@ input CreateUserInput {
   name: String!
   password: String!
   email: String!
+  passwordConfirmation: String!
 }
 
 input UpdateUserInput {
   name: String
   password: String
   email: String
+  passwordConfirmation: String
 }
 
 input CreateGameInput {

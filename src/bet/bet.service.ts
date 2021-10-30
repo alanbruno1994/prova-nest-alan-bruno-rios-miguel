@@ -24,15 +24,11 @@ export class BetService {
     if (!user) {
       throw new InternalServerErrorException('User not found');
     }
-    const connection = getConnection();
-    const queryRunner = connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+ 
     let bets: Bet[] = [];
     for (let bet of data.bets) {
       let game = await this.gameService.findById(bet.gameId);
-      if (!this.validateNumber(game.range, bet.numberChoose)) {
-        await queryRunner.rollbackTransaction();
+      if (!this.validateNumber(game.range, bet.numberChoose)) {       
         throw new InternalServerErrorException(
           'Bet not created due to poorly formatted number',
         );
@@ -43,11 +39,13 @@ export class BetService {
         priceGame: game.price,
         userId,
       });
-      await queryRunner.manager.save(betCreate);
+      const betSaved = await this.betRepository.save(betCreate);
+      if (!betSaved) {
+        throw new InternalServerErrorException('Bet not created');
+      }     
       bets.push(betCreate);
     }
-    await queryRunner.commitTransaction();
-    await queryRunner.release();
+
     return bets;
   }
 
@@ -65,7 +63,7 @@ export class BetService {
       if (data.numberChoose) {
         if (!this.validateNumber(game.range, bet.numberChoose)) {
           throw new InternalServerErrorException(
-            'Bet not created due to poorly formatted number',
+            'Bet not update due to poorly formatted number',
           );
         }
       }

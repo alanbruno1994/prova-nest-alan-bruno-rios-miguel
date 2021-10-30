@@ -101,7 +101,7 @@ describe('UserService', () => {
       mockRepositoryProfile.findOne.mockReturnValue(access);
       mockRepositoryUser.save.mockReturnValue(user);
       mockRepositoryUser.create.mockReturnValue(user);
-      const savedUser = await service.createUser(user);
+      const savedUser = await service.createUser({...user,passwordConfirmation:user.password});
       expect(savedUser).toMatchObject(user);
       expect(mockRepositoryUser.create).toBeCalledTimes(1);
       expect(mockRepositoryUser.save).toBeCalledTimes(1);
@@ -111,7 +111,7 @@ describe('UserService', () => {
       const access = TestUtil.accessProfilePlayer();
       mockRepositoryProfile.findOne.mockReturnValue(access);
       mockRepositoryUser.save.mockReturnValue(null);
-      await service.createUser(user).catch((e) => {
+      await service.createUser({...user,passwordConfirmation:user.password}).catch((e) => {
         expect(e).toBeInstanceOf(InternalServerErrorException);
         expect(e).toMatchObject({
           message: 'User not created',
@@ -129,7 +129,7 @@ describe('UserService', () => {
       mockRepositoryProfile.findOne.mockReturnValue(access);
       mockRepositoryUser.save.mockReturnValue(user);
       mockRepositoryUser.create.mockReturnValue(user);
-      const savedUser = await service.createUserAdmin(user);
+      const savedUser = await service.createUserAdmin({...user,passwordConfirmation:user.password});
       expect(savedUser).toMatchObject(user);
       expect(mockRepositoryUser.create).toBeCalledTimes(1);
       expect(mockRepositoryUser.save).toBeCalledTimes(1);
@@ -139,7 +139,7 @@ describe('UserService', () => {
       const access = TestUtil.accessProfileAdmin();
       mockRepositoryProfile.findOne.mockReturnValue(access);
       mockRepositoryUser.save.mockReturnValue(null);
-      await service.createUserAdmin(user).catch((e) => {
+      await service.createUserAdmin({...user,passwordConfirmation:user.password}).catch((e) => {
         expect(e).toBeInstanceOf(InternalServerErrorException);
         expect(e).toMatchObject({
           message: 'User not created',

@@ -9,8 +9,9 @@ import { Bet } from './bet.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import TestUtil from '../common/test/TestUtil';
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import mock from '../common/test/Mock';
+import { CreateBetInput } from './dto/create-bet.input';
 
 describe('Game Service', () => {
   let service: BetService;
@@ -93,6 +94,23 @@ describe('Game Service', () => {
       expect(service.findById(3)).rejects.toBeInstanceOf(NotFoundException);
       expect(mockRepositoryBet.findOne).toHaveBeenCalledTimes(1);
     });
+  });
+
+  describe('When create bet', () => {
+    it('should create a bet', async () => {
+      const bet1 = TestUtil.betOne();    
+      mockRepositoryUser.findOne.mockReturnValue(TestUtil.userTwo());
+      mockRepositoryGame.findOne.mockReturnValue(TestUtil.gameOne());
+      mockRepositoryBet.save.mockReturnValue(bet1);
+      mockRepositoryBet.create.mockReturnValue(bet1);
+      let cbi=new CreateBetInput();
+      cbi.bets=[bet1]
+      const savedUser = await service.createBet(cbi,bet1.userId);
+      expect(savedUser[0]).toMatchObject(bet1);
+      expect(mockRepositoryBet.create).toBeCalledTimes(1);
+      expect(mockRepositoryBet.save).toBeCalledTimes(1);
+    });
+
   });
 
   describe('When update bet', () => {

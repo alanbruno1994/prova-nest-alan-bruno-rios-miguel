@@ -10,6 +10,13 @@ import { CreateUserInput } from './dto/create-user.input';
 import { User } from './user.entity';
 import { AccessprofileService } from '../accessprofile/accessprofile.service';
 
+interface FilterUser
+{
+  email?:string,
+  password?:string
+  name?:string
+}
+
 @Injectable() //Aqui e para fazer injecao de dependecnia
 export class UserService {
   constructor(
@@ -46,9 +53,11 @@ export class UserService {
 
   async updateUser(id: number, data: UpdateUserInput): Promise<User> {
     const user = await this.userRepository.findOne(id);
+
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    delete data?.passwordConfirmation;
     await this.userRepository.update(id, { ...data });
     const userUpdate = await this.userRepository.create({ ...user, ...data });
     return userUpdate;

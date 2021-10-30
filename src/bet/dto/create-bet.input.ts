@@ -1,4 +1,4 @@
-import { GameExist } from './../validator/GameExist';
+import { BetValidator } from '../validator/BetValidator';
 import { InputType, Field, ObjectType } from '@nestjs/graphql';
 import {
   IsNotEmpty,
@@ -22,7 +22,7 @@ class Bets {
   @Field()
   @IsNumber()
   @Min(1)
-  @Validate(GameExist)
+  @BetValidator('numberChoose')
   gameId: number;
 }
 

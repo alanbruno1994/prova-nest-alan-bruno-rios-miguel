@@ -1,4 +1,4 @@
-import { GameExist } from './../validator/GameExist';
+import { GameExist } from '../validator/GameExist';
 import { InputType, Field } from '@nestjs/graphql';
 import {
   IsNumber,

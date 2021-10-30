@@ -1,4 +1,4 @@
-import { GameExist } from './validator/GameExist';
+import { BetValidatorService } from './validator/BetValidator';
 import { UserModule } from './../user/user.module';
 import { AuthModule } from './../auth/auth.module';
 import { GameModule } from './../game/game.module';
@@ -8,6 +8,7 @@ import { BetResolver } from './bet.resolver';
 import { Bet } from './bet.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessprofileModule } from '../accessprofile/accessprofile.module';
+import { GameExist } from './validator/GameExist';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AccessprofileModule } from '../accessprofile/accessprofile.module';
     AuthModule,
     AccessprofileModule,
   ],
-  providers: [BetService, BetResolver, GameExist],
+  providers: [BetService, BetResolver, BetValidatorService,GameExist],
   exports: [BetService],
 })
 export class BetModule {}
